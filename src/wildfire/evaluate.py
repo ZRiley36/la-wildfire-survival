@@ -92,14 +92,17 @@ def run(df, y_col, c, features, schemes=("cross_fire", "block_cv"), keep_oof=Tru
                 m = factory().fit(X_tr, y_tr)
                 p = m.predict_proba(X_te)[:, 1]
                 preds[name][te] = p
-                if scheme == "cross_fire":
-                    out[scheme].setdefault(split_name, {})[name] = metrics(y_te, p)
+                out[scheme].setdefault("splits", {}).setdefault(split_name, {})[name] = metrics(y_te, p)
                 if importance and name == "hgb":
                     r = permutation_importance(m, X_te, y_te, scoring="roc_auc", n_repeats=c["validation"]["permutation_repeats"],
                                                random_state=c["seed"], n_jobs=-1)
                     imp.append(pd.DataFrame({"feature": features, "importance": r.importances_mean, "split": split_name}))
         if scheme == "block_cv":
             y = df[y_col].values
+            # pooling folds with different constant predictions invents a ranking, so the fold mean is the
+            # cleaner AUC; pooled metrics are kept because Brier and calibration need every prediction
+            out[scheme]["fold_mean"] = {name: {k: round(float(np.mean([s[name][k] for s in out[scheme]["splits"].values()])), 4)
+                                               for k in ["roc_auc", "pr_auc", "brier"]} for name in preds}
             out[scheme]["pooled_oof"] = {name: metrics(y, p) for name, p in preds.items()}
             out[scheme]["pooled_oof_by_fire"] = {
                 fire: {name: metrics(y[(df.fire == fire).values], p[(df.fire == fire).values]) for name, p in preds.items()}
@@ -164,6 +167,7 @@ def leakage_demo(df, y_col, c, features):
 
 def prepare(b, c, pop_col):
     df = b[b[pop_col]].copy().reset_index(drop=True)
+    df[cfg()["features"]["model"]] = df[cfg()["features"]["model"]].astype(float)
     pts = gpd.GeoSeries(df.sample_point, crs=b.crs)
     df["block"] = block_ids(pts, c["validation"]["block_size_m"])
     df["fold"] = assign_block_folds(df.block.values, c["validation"]["n_folds"], c["seed"])
@@ -183,10 +187,12 @@ def main():
                "seed": c["seed"]}
     main_res, oof = run(df, "destroyed", c, features)
     results["main"] = main_res
-    for k, v in main_res["cross_fire"].items():
+    for k, v in main_res["cross_fire"]["splits"].items():
         log(f"{k}: " + ", ".join(f"{m} AUC {r['roc_auc']:.3f} Brier {r['brier']:.3f}" for m, r in v.items()))
-    for m, r in main_res["block_cv"]["pooled_oof"].items():
-        log(f"block CV {m}: AUC {r['roc_auc']:.3f}, PR AUC {r['pr_auc']:.3f}, Brier {r['brier']:.3f}")
+    for m, r in main_res["block_cv"]["fold_mean"].items():
+        po = main_res["block_cv"]["pooled_oof"][m]
+        log(f"block CV {m}: fold-mean AUC {r['roc_auc']:.3f}, PR AUC {r['pr_auc']:.3f}, Brier {r['brier']:.3f} "
+            f"| pooled AUC {po['roc_auc']:.3f}")
     results["main"]["block_cv"]["auc_diff_ci95"] = {
         "hgb_minus_fhsz_in_effect": block_bootstrap_auc_diff(df, "destroyed", oof["hgb"], oof["fhsz_in_effect"], 500, c["seed"]),
         "hgb_minus_logistic": block_bootstrap_auc_diff(df, "destroyed", oof["hgb"], oof["logistic"], 500, c["seed"]),
@@ -205,9 +211,19 @@ def main():
     s2, _ = run(dfb, "destroyed", c, features, keep_oof=False, importance=False)
     results["sensitivity_buffer_population"] = {"n": len(dfb), "destroyed_rate": round(float(dfb.destroyed.mean()), 4), **s2}
     for name, s in [("major+destroyed", s1), ("buffer", s2)]:
-        r = s["block_cv"]["pooled_oof"]
+        r = s["block_cv"]["fold_mean"]
         log(f"  {name}: hgb AUC {r['hgb']['roc_auc']:.3f}, logistic {r['logistic']['roc_auc']:.3f}, "
             f"fhsz {r['fhsz_in_effect']['roc_auc']:.3f}")
+
+    log("sensitivity: without elevation (absolute elevation is a location proxy within one fire)")
+    no_elev = [f for f in features if f != "elevation_m"]
+    s3, _ = run(df, "destroyed", c, no_elev, keep_oof=False, importance=False)
+    results["sensitivity_no_elevation"] = s3
+    for k, v in s3["cross_fire"]["splits"].items():
+        log(f"  {k}: hgb AUC {v['hgb']['roc_auc']:.3f} Brier {v['hgb']['brier']:.3f}, "
+            f"logistic AUC {v['logistic']['roc_auc']:.3f} Brier {v['logistic']['brier']:.3f}")
+    r = s3["block_cv"]["fold_mean"]
+    log(f"  block CV: hgb AUC {r['hgb']['roc_auc']:.3f}, logistic {r['logistic']['roc_auc']:.3f}")
 
     log("leakage demo (post-fire DINS fields, separate from the main results)")
     results["leakage_demo_not_main_model"] = leakage_demo(df, "destroyed", c, features)
