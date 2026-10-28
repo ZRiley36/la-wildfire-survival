@@ -1,0 +1,1317 @@
+{
+ "files": [
+  {
+   "path": "buildings_2023_dins/SOURCE.txt",
+   "mb": 0.0
+  },
+  {
+   "path": "buildings_2023_dins/buildings_2023_dins.geojson",
+   "mb": 41.91
+  },
+  {
+   "path": "census/SOURCE.txt",
+   "mb": 0.0
+  },
+  {
+   "path": "census/cb_2024_06_bg_500k.zip",
+   "mb": 7.02
+  },
+  {
+   "path": "dins_master/SOURCE.txt",
+   "mb": 0.0
+  },
+  {
+   "path": "dins_master/dins_master.geojson",
+   "mb": 45.02
+  },
+  {
+   "path": "dins_public_eaton/SOURCE.txt",
+   "mb": 0.0
+  },
+  {
+   "path": "dins_public_eaton/dins_public_eaton.geojson",
+   "mb": 5.23
+  },
+  {
+   "path": "dins_public_palisades/SOURCE.txt",
+   "mb": 0.0
+  },
+  {
+   "path": "dins_public_palisades/dins_public_palisades.geojson",
+   "mb": 3.44
+  },
+  {
+   "path": "fhsz_lacounty/SOURCE.txt",
+   "mb": 0.0
+  },
+  {
+   "path": "fhsz_lacounty/fhsz_lacounty.geojson",
+   "mb": 3.65
+  },
+  {
+   "path": "fhsz_lra_2025/SOURCE.txt",
+   "mb": 0.0
+  },
+  {
+   "path": "fhsz_lra_2025/fhsz_lra_2025.geojson",
+   "mb": 7.8
+  },
+  {
+   "path": "fhsz_sra_2023/SOURCE.txt",
+   "mb": 0.0
+  },
+  {
+   "path": "fhsz_sra_2023/fhsz_sra_2023.geojson",
+   "mb": 3.44
+  },
+  {
+   "path": "landfire_fbfm40/SOURCE.txt",
+   "mb": 0.0
+  },
+  {
+   "path": "landfire_fbfm40/lf2023_fbfm40_eaton.tif",
+   "mb": 0.66
+  },
+  {
+   "path": "landfire_fbfm40/lf2023_fbfm40_palisades.tif",
+   "mb": 1.15
+  },
+  {
+   "path": "parcels_dins/SOURCE.txt",
+   "mb": 0.0
+  },
+  {
+   "path": "parcels_dins/parcels_dins.geojson",
+   "mb": 87.88
+  },
+  {
+   "path": "perimeters_calfire/SOURCE.txt",
+   "mb": 0.0
+  },
+  {
+   "path": "perimeters_calfire/perimeters_calfire.geojson",
+   "mb": 0.55
+  },
+  {
+   "path": "perimeters_lacounty/SOURCE.txt",
+   "mb": 0.0
+  },
+  {
+   "path": "perimeters_lacounty/perimeters_lacounty.geojson",
+   "mb": 0.14
+  },
+  {
+   "path": "usgs_3dep/SOURCE.txt",
+   "mb": 0.0
+  },
+  {
+   "path": "usgs_3dep/USGS_13_n35w119_20240207.tif",
+   "mb": 457.92
+  },
+  {
+   "path": "vhfhsz_la_city/SOURCE.txt",
+   "mb": 0.0
+  },
+  {
+   "path": "vhfhsz_la_city/vhfhsz_la_city.geojson",
+   "mb": 0.37
+  }
+ ],
+ "perimeters": {
+  "calfire": {
+   "rows": 2,
+   "crs": "EPSG:3310",
+   "geometry_types": {
+    "MultiPolygon": 2
+   },
+   "invalid": 2,
+   "null_geometry": 0,
+   "bounds": [
+    121296.18665,
+    -441792.71573,
+    183123.38769,
+    -417997.69206
+   ],
+   "columns": [
+    "OBJECTID",
+    "YEAR_",
+    "STATE",
+    "AGENCY",
+    "UNIT_ID",
+    "FIRE_NAME",
+    "INC_NUM",
+    "IRWINID",
+    "ALARM_DATE",
+    "CONT_DATE",
+    "CAUSE",
+    "C_METHOD",
+    "OBJECTIVE",
+    "GIS_ACRES",
+    "COMMENTS",
+    "COMPLEX_NAME",
+    "COMPLEX_ID",
+    "FIRE_NUM",
+    "GlobalID",
+    "Shape__Area",
+    "Shape__Length"
+   ],
+   "key_fields": {
+    "FIRE_NAME": {
+     "nulls": 0,
+     "unique": 2,
+     "top": {
+      "PALISADES": 1,
+      "EATON": 1
+     }
+    }
+   },
+   "acres_after_make_valid": {
+    "PALISADES": 23449.0,
+    "EATON": 14056.0
+   },
+   "gis_acres": {
+    "PALISADES": 23449.0,
+    "EATON": 14056.0
+   }
+  },
+  "lacounty": {
+   "rows": 1,
+   "crs": "EPSG:4326",
+   "geometry_types": {
+    "MultiPolygon": 1
+   },
+   "invalid": 1,
+   "null_geometry": 0,
+   "bounds": [
+    -118.16207,
+    34.16189,
+    -118.01305,
+    34.23783
+   ],
+   "columns": [
+    "OBJECTID",
+    "YEAR_",
+    "STATE",
+    "AGENCY",
+    "UNIT_ID",
+    "FIRE_NAME",
+    "type",
+    "INC_NUM",
+    "IRWINID",
+    "ALARM_DATE",
+    "CONT_DATE",
+    "CAUSE",
+    "C_METHOD",
+    "OBJECTIVE",
+    "GIS_ACRES",
+    "COMMENTS",
+    "COMPLEX_NAME",
+    "COMPLEX_ID",
+    "FIRE_NUM",
+    "GlobalID",
+    "DECADES",
+    "Shape__Area",
+    "Shape__Length"
+   ],
+   "key_fields": {
+    "FIRE_NAME": {
+     "nulls": 0,
+     "unique": 1,
+     "top": {
+      "EATON": 1
+     }
+    }
+   },
+   "note": "Named 'Palisades and Eaton' but holds only the Eaton perimeter."
+  }
+ },
+ "dins": {
+  "rows": 30565,
+  "crs": "EPSG:4326",
+  "geometry_types": {
+   "Point": 30565
+  },
+  "invalid": 0,
+  "null_geometry": 0,
+  "bounds": [
+   -118.6859,
+   34.0298,
+   -118.01833,
+   34.23217
+  ],
+  "columns": [
+   "OBJECTID",
+   "GLOBALID",
+   "DAMAGE",
+   "STRUCTURETYPE",
+   "STREETNUMBER",
+   "STREETNAME",
+   "STREETTYPE",
+   "STREETSUFFIX",
+   "CITY",
+   "STATE",
+   "ZIPCODE",
+   "CALFIREUNIT",
+   "COUNTY",
+   "COMMUNITY",
+   "BATTALION",
+   "INCIDENTNAME",
+   "INCIDENTNUM",
+   "INCIDENTSTARTDATE",
+   "HAZARDTYPE",
+   "WHEREFIRESTARTEDONSTRUCTURE",
+   "WHATDIDFIRESTARTFROM",
+   "DEFENSIVEACTIONS",
+   "STRUCTURECATEGORY",
+   "NUMBEROFUNITPERSTRUCTURE",
+   "NOOUTBUILDINGSDAMAGED",
+   "NOOUTBUILDINGSNOTDAMAGED",
+   "NOOFCARSONPROPERTY",
+   "ROOFCONSTRUCTION",
+   "EAVES",
+   "VENTSCREEN",
+   "EXTERIORSIDING",
+   "WINDOWPANE",
+   "DECKPORCHONGRADE",
+   "DECKPORCHELEVATED",
+   "PATIOCOVERCARPORT",
+   "FENCEATTACHEDTOSTRUCTURE",
+   "PROPANETANKDISTANCE",
+   "UTILITYMISCSTRUCTUREDISTANCE",
+   "FIRENAME",
+   "APN",
+   "ASSESSEDIMPROVEDVALUE",
+   "YEARBUILT",
+   "SITEADDRESS",
+   "LATITUDE",
+   "LONGITUDE"
+  ],
+  "key_fields": {
+   "INCIDENTNAME": {
+    "nulls": 0,
+    "unique": 2,
+    "top": {
+     "Eaton": 18428,
+     "Palisades": 12137
+    }
+   },
+   "DAMAGE": {
+    "nulls": 0,
+    "unique": 6,
+    "top": {
+     "Destroyed (>50%)": 16264,
+     "No Damage": 12154,
+     "Affected (>0-10%)": 1590,
+     "Minor (10-25%)": 319,
+     "Major (25-50%)": 142,
+     "Inaccessible": 96
+    }
+   },
+   "STRUCTURECATEGORY": {
+    "nulls": 0,
+    "unique": 6,
+    "top": {
+     "Single Residence": 21392,
+     "Other Minor Structure": 7489,
+     "Nonresidential Commercial": 760,
+     "Multiple Residence": 737,
+     "Infrastructure": 164,
+     "Mixed Commercial/Residential": 23
+    }
+   },
+   "STRUCTURETYPE": {
+    "nulls": 0,
+    "unique": 16,
+    "top": {
+     "Single Family Residence Single Story": 13115,
+     "Single Family Residence Multi Story": 7879,
+     "Utility Misc Structure": 7488,
+     "Multi Family Residence Multi Story": 584,
+     "Commercial Building Single Story": 371,
+     "Mobile Home Double Wide": 246,
+     "School": 223,
+     "Infrastructure": 164,
+     "Multi Family Residence Single Story": 149,
+     "Commercial Building Multi Story": 129,
+     "Mobile Home Single Wide": 113,
+     "Church": 34
+    }
+   }
+  },
+  "damage_by_fire": {
+   "Eaton": {
+    "Affected (>0-10%)": 858,
+    "Destroyed (>50%)": 9419,
+    "Inaccessible": 40,
+    "Major (25-50%)": 70,
+    "Minor (10-25%)": 148,
+    "No Damage": 7893
+   },
+   "Palisades": {
+    "Affected (>0-10%)": 732,
+    "Destroyed (>50%)": 6845,
+    "Inaccessible": 56,
+    "Major (25-50%)": 72,
+    "Minor (10-25%)": 171,
+    "No Damage": 4261
+   }
+  },
+  "residential_damage_by_fire": {
+   "Eaton": {
+    "Affected (>0-10%)": 632,
+    "Destroyed (>50%)": 6116,
+    "Inaccessible": 31,
+    "Major (25-50%)": 39,
+    "Minor (10-25%)": 111,
+    "No Damage": 5290
+   },
+   "Palisades": {
+    "Affected (>0-10%)": 619,
+    "Destroyed (>50%)": 5566,
+    "Inaccessible": 50,
+    "Major (25-50%)": 58,
+    "Minor (10-25%)": 143,
+    "No Damage": 3497
+   }
+  },
+  "residential_rows": 22152,
+  "yearbuilt": {
+   "all_with_year_pct": 96.8,
+   "residential_with_year_pct": 98.3,
+   "zero": 987,
+   "min": 1885,
+   "median": 1949,
+   "max": 2022,
+   "built_after_2008_residential": 576
+  },
+  "apn": {
+   "nulls": 12,
+   "lengths": {
+    "10": 30553
+   },
+   "sample": [
+    "5829041010",
+    "5827019030",
+    "5833002018",
+    "5844006003",
+    "5846005021",
+    "4415018027"
+   ]
+  },
+  "inside_vs_buffer": {
+   "PALISADES": {
+    "total": 12137,
+    "inside": 9551,
+    "outside_within_300ft": 2095,
+    "outside_beyond_300ft": 491,
+    "max_distance_outside_m": 288.8
+   },
+   "EATON": {
+    "total": 18428,
+    "inside": 13081,
+    "outside_within_300ft": 3626,
+    "outside_beyond_300ft": 1721,
+    "max_distance_outside_m": 623.6
+   }
+  },
+  "post_fire_fields": {
+   "ROOFCONSTRUCTION": {
+    "why": "roof material, recorded by the inspector after the fire",
+    "filled_pct": 100.0,
+    "unknown_pct_destroyed": 12.5,
+    "unknown_pct_not_destroyed": 2.3
+   },
+   "EAVES": {
+    "why": "eave type, recorded after the fire",
+    "filled_pct": 100.0,
+    "unknown_pct_destroyed": 71.1,
+    "unknown_pct_not_destroyed": 0.7
+   },
+   "VENTSCREEN": {
+    "why": "vent screen, recorded after the fire",
+    "filled_pct": 100.0,
+    "unknown_pct_destroyed": 45.1,
+    "unknown_pct_not_destroyed": 3.9
+   },
+   "EXTERIORSIDING": {
+    "why": "siding material, recorded after the fire",
+    "filled_pct": 100.0,
+    "unknown_pct_destroyed": 4.4,
+    "unknown_pct_not_destroyed": 0.5
+   },
+   "WINDOWPANE": {
+    "why": "window glazing, recorded after the fire",
+    "filled_pct": 100.0,
+    "unknown_pct_destroyed": 45.1,
+    "unknown_pct_not_destroyed": 1.0
+   },
+   "DECKPORCHONGRADE": {
+    "why": "deck on grade, recorded after the fire",
+    "filled_pct": 100.0,
+    "unknown_pct_destroyed": 8.2,
+    "unknown_pct_not_destroyed": 1.0
+   },
+   "DECKPORCHELEVATED": {
+    "why": "elevated deck, recorded after the fire",
+    "filled_pct": 100.0,
+    "unknown_pct_destroyed": 20.6,
+    "unknown_pct_not_destroyed": 1.8
+   },
+   "PATIOCOVERCARPORT": {
+    "why": "patio cover / carport, recorded after the fire",
+    "filled_pct": 100.0,
+    "unknown_pct_destroyed": 24.8,
+    "unknown_pct_not_destroyed": 1.5
+   },
+   "FENCEATTACHEDTOSTRUCTURE": {
+    "why": "attached fence, recorded after the fire",
+    "filled_pct": 100.0,
+    "unknown_pct_destroyed": 10.7,
+    "unknown_pct_not_destroyed": 0.7
+   },
+   "PROPANETANKDISTANCE": {
+    "why": "propane tank distance, recorded after the fire",
+    "filled_pct": 37.3,
+    "unknown_pct_destroyed": 0.0,
+    "unknown_pct_not_destroyed": 0.0
+   },
+   "UTILITYMISCSTRUCTUREDISTANCE": {
+    "why": "distance to outbuildings, recorded after the fire",
+    "filled_pct": 37.8,
+    "unknown_pct_destroyed": 0.0,
+    "unknown_pct_not_destroyed": 0.0
+   },
+   "NOOUTBUILDINGSDAMAGED": {
+    "why": "count of outbuildings damaged (outcome of the fire itself)",
+    "filled_pct": 100.0
+   },
+   "NOOUTBUILDINGSNOTDAMAGED": {
+    "why": "count of outbuildings not damaged (outcome of the fire itself)",
+    "filled_pct": 100.0
+   },
+   "NOOFCARSONPROPERTY": {
+    "why": "cars on the property at inspection",
+    "filled_pct": 100.0
+   },
+   "WHEREFIRESTARTEDONSTRUCTURE": {
+    "why": "ignition point on the structure (only filled for damaged buildings)",
+    "filled_pct": 5.4,
+    "unknown_pct_destroyed": 0.0,
+    "unknown_pct_not_destroyed": 1.1
+   },
+   "WHATDIDFIRESTARTFROM": {
+    "why": "ignition mechanism (only filled for damaged buildings)",
+    "filled_pct": 5.4,
+    "unknown_pct_destroyed": 0.0,
+    "unknown_pct_not_destroyed": 1.0
+   },
+   "DEFENSIVEACTIONS": {
+    "why": "firefighting actions during the fire",
+    "filled_pct": 36.9,
+    "unknown_pct_destroyed": 31.4,
+    "unknown_pct_not_destroyed": 31.9
+   },
+   "DAMAGE": {
+    "why": "the outcome itself",
+    "filled_pct": 100.0
+   }
+  },
+  "public_views": {
+   "rows": {
+    "eaton": 18428,
+    "palisades": 12081
+   },
+   "damage": {
+    "eaton": {
+     "Affected (1-9%)": 858,
+     "Destroyed (>50%)": 9419,
+     "Inaccessible": 40,
+     "Major (26-50%)": 70,
+     "Minor (10-25%)": 148,
+     "No Damage": 7893
+    },
+    "palisades": {
+     "Affected (1-9%)": 732,
+     "Destroyed (>50%)": 6845,
+     "Inaccessible": 0,
+     "Major (26-50%)": 72,
+     "Minor (10-25%)": 171,
+     "No Damage": 4261
+    }
+   },
+   "globalid_overlap_with_master": 0
+  }
+ },
+ "parcels": {
+  "rows": 24462,
+  "crs": "EPSG:4326",
+  "geometry_types": {
+   "Polygon": 24251,
+   "MultiPolygon": 210
+  },
+  "invalid": 5,
+  "null_geometry": 1,
+  "bounds": [
+   -118.709,
+   34.02813,
+   -118.01266,
+   34.25221
+  ],
+  "columns": [
+   "OBJECTID",
+   "AIN_1",
+   "APN_1",
+   "SitusHouseNo",
+   "SitusFraction",
+   "SitusDirection",
+   "SitusUnit",
+   "SitusStreet",
+   "SitusAddress",
+   "SitusCity",
+   "SitusZIP",
+   "SitusFullAddress",
+   "TaxRateArea",
+   "TaxRateCity",
+   "AgencyClassNo",
+   "AgencyName",
+   "AgencyType",
+   "UseCode",
+   "UseCode_2",
+   "UseType",
+   "UseDescription",
+   "DesignType1",
+   "YearBuilt1",
+   "EffectiveYear1",
+   "Units1",
+   "Bedrooms1",
+   "Bathrooms1",
+   "SQFTmain1",
+   "DesignType2",
+   "YearBuilt2",
+   "EffectiveYear2",
+   "Units2",
+   "Bedrooms2",
+   "Bathrooms2",
+   "SQFTmain2",
+   "DesignType3",
+   "YearBuilt3",
+   "EffectiveYear3",
+   "Units3",
+   "Bedrooms3",
+   "Bathrooms3",
+   "SQFTmain3",
+   "DesignType4",
+   "YearBuilt4",
+   "EffectiveYear4",
+   "Units4",
+   "Bedrooms4",
+   "Bathrooms4",
+   "SQFTmain4",
+   "DesignType5",
+   "YearBuilt5",
+   "EffectiveYear5",
+   "Units5",
+   "Bedrooms5",
+   "Bathrooms5",
+   "SQFTmain5",
+   "RecDate",
+   "RecDocNo",
+   "Roll_Year",
+   "Roll_LandValue",
+   "Roll_ImpValue",
+   "Roll_PersPropValue",
+   "Roll_FixtureValue",
+   "Roll_HomeOwnersExemp",
+   "Roll_RealEstateExemp",
+   "Roll_PersPropExemp",
+   "Roll_FixtureExemp",
+   "Roll_LandBaseYear",
+   "Roll_ImpBaseYear",
+   "LastSaleDate",
+   "LastSaleAmount",
+   "QualityClass1",
+   "QualityClass2",
+   "QualityClass3",
+   "QualityClass4",
+   "QualityClass5",
+   "LegalDescLine1",
+   "LegalDescLine2",
+   "LegalDescLine3",
+   "LegalDescLine4",
+   "LegalDescLine5",
+   "LegalDescLineLast",
+   "LegalDescription",
+   "SpatialChangeDate",
+   "ParcelCreateDate",
+   "ParcelTypeCode",
+   "Assr_Map",
+   "Assr_Index_Map",
+   "CENTER_LAT",
+   "CENTER_LON",
+   "CENTER_X",
+   "CENTER_Y",
+   "LAT_LON",
+   "Fire_Name",
+   "DAMAGE_1",
+   "STRUCTURECATEGORY",
+   "Total_Units",
+   "GlobalID",
+   "Shape__Area",
+   "Shape__Length",
+   "Tot_SqFt",
+   "DINS_Count",
+   "LCITY",
+   "COMMUNITY",
+   "BSD_Tag",
+   "TT_Eligible",
+   "Debris_Cleared",
+   "ROE_Number",
+   "FSO_URL",
+   "ROE_Status",
+   "Permit_Status",
+   "elibility_calc"
+  ],
+  "key_fields": {
+   "Fire_Name": {
+    "nulls": 11,
+    "unique": 2,
+    "top": {
+     "Palisades": 12387,
+     "Eaton": 12064
+    }
+   },
+   "DAMAGE_1": {
+    "nulls": 10,
+    "unique": 6,
+    "top": {
+     "Destroyed (>50%)": 11965,
+     "No Damage": 8374,
+     "No Data/Vacant": 2238,
+     "Affected (1-9%)": 1393,
+     "Minor (10-25%)": 374,
+     "Major (26-50%)": 108
+    }
+   },
+   "STRUCTURECATEGORY": {
+    "nulls": 2581,
+    "unique": 7,
+    "top": {
+     "Single Residence": 19221,
+     "Multiple Residence": 2139,
+     "Nonresidential Commercial": 388,
+     "Infrastructure": 79,
+     "Mixed Commercial/Residential": 52,
+     "Utility or Miscellaneous Structure > 120 sqft": 1,
+     "Single Family Residence": 1
+    }
+   },
+   "UseType": {
+    "nulls": 10,
+    "unique": 8,
+    "top": {
+     "Residential": 23512,
+     "Government": 364,
+     "Commercial": 351,
+     "Miscellaneous": 83,
+     "Institutional": 75,
+     "Recreational": 28,
+     "Irrigated Farm": 23,
+     "Industrial": 16
+    }
+   },
+   "UseCode_2": {
+    "nulls": 21,
+    "unique": 47,
+    "top": {
+     "01": 22728,
+     "02": 430,
+     "88": 356,
+     "05": 128,
+     "03": 95,
+     "04": 89,
+     "11": 84,
+     "12": 70,
+     "81": 57,
+     "17": 48,
+     "71": 31,
+     "10": 30
+    }
+   },
+   "DINS_Count": {
+    "nulls": 2209,
+    "unique": 34,
+    "top": {
+     "1.0": 12976,
+     "2.0": 7176,
+     "3.0": 818,
+     "0.0": 261,
+     "7.0": 148,
+     "4.0": 141,
+     "14.0": 123,
+     "32.0": 110,
+     "12.0": 93,
+     "5.0": 81,
+     "13.0": 61,
+     "10.0": 58
+    }
+   },
+   "LCITY": {
+    "nulls": 1,
+    "unique": 10,
+    "top": {
+     "UA EATON": 9913,
+     "Los Angeles": 9269,
+     "UA PALISADES": 1705,
+     "Malibu": 1414,
+     "Pasadena": 1273,
+     "Sierra Madre": 757,
+     "Arcadia": 122,
+     "Unincorporated": 4,
+     "Monrovia": 3,
+     "PASADENA": 1
+    }
+   },
+   "COMMUNITY": {
+    "nulls": 106,
+    "unique": 10,
+    "top": {
+     "Altadena": 9515,
+     "Pacific Palisades": 7140,
+     " ": 3494,
+     "Santa Monica Mountains": 1707,
+     "Palisades Highlands": 1640,
+     "Mandeville Canyon": 432,
+     "Kinneloa Mesa": 319,
+     "Angeles National Forest": 76,
+     "Brentwood": 31,
+     "Encino": 2
+    }
+   }
+  },
+  "ain_apn": {
+   "AIN_1_lengths": {
+    "10": 24461
+   },
+   "APN_1_sample": [
+    "4412-013-017",
+    "4412-013-018",
+    "4412-013-019"
+   ],
+   "AIN_1_sample": [
+    "4412013017",
+    "4412013018",
+    "4412013019"
+   ],
+   "AIN_equals_APN_without_dashes": 24461,
+   "duplicate_AIN": 0
+  },
+  "buildings_on_parcel": {
+   "with_YearBuilt1": 21803,
+   "with_YearBuilt2": 690,
+   "with_YearBuilt3": 106,
+   "with_YearBuilt4": 48,
+   "with_YearBuilt5": 23
+  },
+  "YearBuilt1": {
+   "nulls": 2607,
+   "zero": 52,
+   "median": 1953.0
+  },
+  "EffectiveYear1_nulls": 2607,
+  "UseCode_sample": [
+   "010V",
+   "0100",
+   "0100",
+   "0101",
+   "0100",
+   "0100",
+   "0101",
+   "0101",
+   "010C",
+   "0100"
+  ]
+ },
+ "buildings": {
+  "rows": 45433,
+  "crs": "EPSG:4326",
+  "geometry_types": {
+   "Polygon": 45431,
+   "MultiPolygon": 2
+  },
+  "invalid": 24,
+  "null_geometry": 0,
+  "bounds": [
+   -118.68795,
+   34.02928,
+   -118.01758,
+   34.23226
+  ],
+  "columns": [
+   "OBJECTID",
+   "CODE",
+   "BLD_ID",
+   "HEIGHT",
+   "ELEV",
+   "SOURCE",
+   "DATE_",
+   "STATUS",
+   "OLD_BLD_ID",
+   "AREA",
+   "DAMAGE",
+   "STRUCTURET",
+   "Shape__Area",
+   "Shape__Length"
+  ],
+  "key_fields": {
+   "CODE": {
+    "nulls": 0,
+    "unique": 3,
+    "top": {
+     "Building": 45068,
+     "Courtyard": 289,
+     "Free Standing Solar Structure": 76
+    }
+   },
+   "DAMAGE": {
+    "nulls": 14993,
+    "unique": 6,
+    "top": {
+     "Destroyed (>50%)": 16244,
+     "No Damage": 12107,
+     "Affected (1-9%)": 1583,
+     "Minor (10-25%)": 319,
+     "Major (26-50%)": 146,
+     "Inaccessible": 41
+    }
+   },
+   "STRUCTURET": {
+    "nulls": 15660,
+    "unique": 16,
+    "top": {
+     "Single Family Residence Single Story": 13430,
+     "Single Family Residence Multi Story": 7910,
+     "Utility Misc Structure": 6417,
+     "Multi Family Residence Multi Story": 646,
+     "Commercial Building Single Story": 359,
+     "Mobile Home Double Wide": 247,
+     "School": 182,
+     "Multi Family Residence Single Story": 153,
+     "Commercial Building Multi Story": 126,
+     "Infrastructure": 118,
+     "Mobile Home Single Wide": 98,
+     "Church": 36
+    }
+   },
+   "STATUS": {
+    "nulls": 0,
+    "unique": 4,
+    "top": {
+     "Unchanged": 42812,
+     "Modified": 2000,
+     "New": 600,
+     "Replacement": 21
+    }
+   },
+   "SOURCE": {
+    "nulls": 0,
+    "unique": 6,
+    "top": {
+     "LARIAC2": 27832,
+     "Pasadena": 7655,
+     "LARIAC5": 2972,
+     "LARIAC6": 2784,
+     "LARIAC7": 2621,
+     "LARIAC4": 1569
+    }
+   },
+   "DATE_": {
+    "nulls": 0,
+    "unique": 5,
+    "top": {
+     "2008": 35487,
+     "2017": 2972,
+     "2020": 2784,
+     "2023": 2621,
+     "2014": 1569
+    }
+   }
+  },
+  "duplicate_BLD_ID": 288,
+  "AREA_sqft": {
+   "count": 45428.0,
+   "mean": 1973.1,
+   "std": 2208.6,
+   "min": 2.5,
+   "25%": 579.5,
+   "50%": 1671.9,
+   "75%": 2760.8,
+   "max": 111728.9
+  },
+  "note": "AREA is square feet (matches Shape__Area in Web Mercator m2 after the cos(lat)^2 correction)."
+ },
+ "joins": {
+  "residential_dins": 22152,
+  "point_in_footprint": 21222,
+  "point_in_more_than_one_footprint": 0,
+  "nearest_footprint_for_misses_m": {
+   "count": 930.0,
+   "mean": 9.5,
+   "std": 20.5,
+   "min": 0.0,
+   "25%": 0.7,
+   "50%": 2.0,
+   "75%": 7.3,
+   "max": 186.7
+  },
+  "matched_within_2m_pct": 97.88,
+  "matched_within_5m_pct": 98.64,
+  "matched_within_10m_pct": 99.14,
+  "matched_within_20m_pct": 99.48,
+  "footprints_hit_by_several_dins": 136,
+  "dins_apn_in_parcels_pct": 99.73,
+  "residential_dins_apn_in_parcels_pct": 99.75,
+  "parcels_with_several_residential_dins": 1643,
+  "residential_dins_on_multi_building_parcels": 4204
+ },
+ "hazard_zones": {
+  "fhsz_lacounty": {
+   "rows": 165,
+   "crs": "EPSG:4326",
+   "geometry_types": {
+    "Polygon": 149,
+    "MultiPolygon": 16
+   },
+   "invalid": 9,
+   "null_geometry": 0,
+   "bounds": [
+    -118.9448,
+    33.94607,
+    -117.64666,
+    34.60959
+   ],
+   "columns": [
+    "OBJECTID_1",
+    "OBJECTID",
+    "FID_c19fhs",
+    "HAZ_CODE",
+    "HAZ_CLASS",
+    "SRA",
+    "INCORP",
+    "VH_REC",
+    "Shape_Leng",
+    "Shape__Area",
+    "Shape__Length",
+    "GlobalID"
+   ],
+   "key_fields": {
+    "HAZ_CLASS": {
+     "nulls": 0,
+     "unique": 3,
+     "top": {
+      "Very High": 157,
+      "High": 6,
+      "Moderate": 2
+     }
+    },
+    "SRA": {
+     "nulls": 0,
+     "unique": 3,
+     "top": {
+      "LRA": 72,
+      "FRA": 50,
+      "SRA": 43
+     }
+    },
+    "INCORP": {
+     "nulls": 0,
+     "unique": 2,
+     "top": {
+      " ": 119,
+      "Y": 46
+     }
+    }
+   },
+   "dates": "LACoFD 'Los Angeles County Fire Hazard Severity Zones' (CAL FIRE data). Created 2019-04-02, modified 2023-03-23. 2007 SRA / 2007-2011 LRA-era schema (FID_c19fhs).",
+   "share_of_perimeter_pct": {
+    "PALISADES": {
+     "Very High": 100.0
+    },
+    "EATON": {
+     "Very High": 87.3
+    }
+   }
+  },
+  "fhsz_sra_2023": {
+   "rows": 56,
+   "crs": "EPSG:4326",
+   "geometry_types": {
+    "Polygon": 56
+   },
+   "invalid": 3,
+   "null_geometry": 0,
+   "bounds": [
+    -120.50362,
+    33.96881,
+    -117.91647,
+    34.61952
+   ],
+   "columns": [
+    "OBJECTID",
+    "SRA",
+    "FHSZ",
+    "FHSZ_Description",
+    "Shape__Area",
+    "Shape__Length"
+   ],
+   "key_fields": {
+    "SRA": {
+     "nulls": 0,
+     "unique": 1,
+     "top": {
+      "SRA": 56
+     }
+    },
+    "FHSZ_Description": {
+     "nulls": 0,
+     "unique": 3,
+     "top": {
+      "Very High": 44,
+      "High": 7,
+      "Moderate": 5
+     }
+    }
+   },
+   "dates": "CAL FIRE FHSZ in SRA, adopted April 1, 2024.",
+   "share_of_perimeter_pct": {
+    "PALISADES": {
+     "High": 0.0,
+     "Very High": 32.9
+    },
+    "EATON": {
+     "Very High": 18.4
+    }
+   }
+  },
+  "fhsz_lra_2025": {
+   "rows": 252,
+   "crs": "EPSG:4326",
+   "geometry_types": {
+    "Polygon": 245,
+    "MultiPolygon": 7
+   },
+   "invalid": 8,
+   "null_geometry": 0,
+   "bounds": [
+    -119.00715,
+    33.38142,
+    -117.10829,
+    34.33731
+   ],
+   "columns": [
+    "OBJECTID",
+    "SRA",
+    "FHSZ",
+    "FHSZ_Description",
+    "Shape__Area",
+    "Shape__Length"
+   ],
+   "key_fields": {
+    "SRA": {
+     "nulls": 0,
+     "unique": 1,
+     "top": {
+      "LRA": 252
+     }
+    },
+    "FHSZ_Description": {
+     "nulls": 0,
+     "unique": 4,
+     "top": {
+      "NonWildland": 148,
+      "Moderate": 46,
+      "High": 41,
+      "Very High": 17
+     }
+    }
+   },
+   "dates": "CAL FIRE recommended FHSZ in LRA, map dated March 24, 2025 (after the fires).",
+   "share_of_perimeter_pct": {
+    "PALISADES": {
+     "High": 0.0,
+     "Very High": 66.2
+    },
+    "EATON": {
+     "High": 1.8,
+     "Moderate": 1.7,
+     "NonWildland": 9.7,
+     "Very High": 13.0
+    }
+   }
+  },
+  "vhfhsz_la_city": {
+   "rows": 7,
+   "crs": "EPSG:4326",
+   "geometry_types": {
+    "Polygon": 7
+   },
+   "invalid": 0,
+   "null_geometry": 0,
+   "bounds": [
+    -118.66816,
+    33.9971,
+    -118.16128,
+    34.3373
+   ],
+   "columns": [
+    "shape_area",
+    "shape_len",
+    "ObjectId",
+    "Shape__Area",
+    "Shape__Length"
+   ],
+   "dates": "City of Los Angeles VHFHSZ, last updated 2019-09-03.",
+   "share_of_perimeter_pct": {
+    "PALISADES": 59.0,
+    "EATON": 0.0
+   }
+  }
+ },
+ "rasters": {
+  "landfire_palisades": {
+   "crs": "EPSG:5070",
+   "res": [
+    30.0,
+    30.0
+   ],
+   "size": [
+    787,
+    572
+   ],
+   "dtype": "int16",
+   "nodata": -9999.0,
+   "bounds": [
+    -2061645,
+    1458735,
+    -2038035,
+    1475895
+   ],
+   "covers_perimeter": true,
+   "codes": {
+    "-9999": 7241,
+    "91": 109980,
+    "93": 52,
+    "98": 103155,
+    "99": 1138,
+    "101": 3530,
+    "102": 5752,
+    "103": 29,
+    "121": 8492,
+    "122": 42577,
+    "123": 14537,
+    "141": 4531,
+    "142": 9611,
+    "144": 15,
+    "145": 105004,
+    "147": 109,
+    "161": 223,
+    "162": 51,
+    "163": 333,
+    "165": 11969,
+    "181": 145,
+    "182": 788,
+    "183": 5830,
+    "184": 560,
+    "185": 5413,
+    "186": 7808,
+    "188": 1119,
+    "189": 172
+   },
+   "burnable_pct": 51.6
+  },
+  "landfire_eaton": {
+   "crs": "EPSG:5070",
+   "res": [
+    30.0,
+    30.0
+   ],
+   "size": [
+    634,
+    496
+   ],
+   "dtype": "int16",
+   "nodata": -9999.0,
+   "bounds": [
+    -2011755,
+    1463625,
+    -1992735,
+    1478505
+   ],
+   "covers_perimeter": true,
+   "codes": {
+    "91": 113712,
+    "98": 44,
+    "99": 1132,
+    "101": 3456,
+    "102": 3150,
+    "103": 26,
+    "121": 7197,
+    "122": 40126,
+    "123": 1767,
+    "141": 9280,
+    "142": 36411,
+    "143": 7,
+    "144": 7,
+    "145": 52715,
+    "147": 8,
+    "161": 1992,
+    "162": 386,
+    "163": 33,
+    "165": 12864,
+    "181": 1011,
+    "182": 653,
+    "183": 5281,
+    "184": 1272,
+    "185": 4751,
+    "186": 1498,
+    "188": 15566,
+    "189": 118,
+    "201": 1
+   },
+   "burnable_pct": 63.5
+  },
+  "dem": {
+   "crs": "EPSG:4269",
+   "res_deg": [
+    9.25925927753796e-05,
+    9.25925927753796e-05
+   ],
+   "approx_res_m": [
+    8.6,
+    10.3
+   ],
+   "size": [
+    10812,
+    10812
+   ],
+   "dtype": "float32",
+   "nodata": -999999.0,
+   "bounds": [
+    -119.0006,
+    33.9994,
+    -117.9994,
+    35.0006
+   ],
+   "covers_both_perimeters": true,
+   "elevation_over_fires_m": [
+    -0.3,
+    1750.3
+   ],
+   "nodata_cells_over_fires": 0
+  }
+ },
+ "block_groups": {
+  "rows_ca": 25586,
+  "la_county": 6587,
+  "crs": "EPSG:4269"
+ }
+}

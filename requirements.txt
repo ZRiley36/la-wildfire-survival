@@ -1,0 +1,15 @@
+geopandas>=1.0
+shapely>=2.0
+pyproj
+pyogrio
+pyarrow
+rasterio
+rasterstats
+numpy
+pandas
+scipy
+scikit-learn
+matplotlib
+pyyaml
+requests
+pytest
