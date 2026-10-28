@@ -79,5 +79,5 @@ parcels can hold several buildings, and the official hazard map in effect was la
 
 ## Citation
 
-Monroy, F., et al. (2025). *The 2025 LA Conflagrations.* Insurance Institute for Business & Home Safety.
+Monroy et al. (2025). *The 2025 LA Conflagrations.* Insurance Institute for Business & Home Safety.
 https://doi.org/10.82346/KYXN-NS13
