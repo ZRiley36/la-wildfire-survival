@@ -1,0 +1,68 @@
+# LA Wildfire Survival: every tunable choice lives here, so a new hazard or city changes this file, not the code.
+
+# EPSG:3310 California Albers (meters). The feature buffers below and LANDFIRE's 30 m cells are metric, it's
+# equal-area so "share of a buffer that's burnable" is a true area share, and it covers the whole state.
+crs: "EPSG:3310"
+seed: 20250107  # the Palisades fire's start date
+
+study_area:
+  fires: [PALISADES, EATON]
+  clip_buffer_m: 1000          # keep everything within 1 km of either perimeter
+  outside_band_m: 91.44        # 300 ft, for the buffer sensitivity run
+
+join:
+  footprint_codes: [Building]  # drop Courtyard and Free Standing Solar Structure outlines
+  nearest_footprint_max_m: 5   # DINS points that miss every footprint snap to one this close
+
+outcome:
+  residential_categories: [Single Residence, Multiple Residence, Mixed Commercial/Residential]
+  destroyed: [Destroyed]                  # main label: Destroyed (>50%)
+  destroyed_sensitivity: [Destroyed, Major]
+  drop: [Inaccessible]
+  ordinal: {No Damage: 0, Affected: 1, Minor: 2, Major: 3, Destroyed: 4}
+
+features:
+  neighbor_radii_m: [10, 30, 50]
+  fuel_buffers_m: [30, 100, 300]
+  fuel_supersample: 6          # 30 m cells split 6x6 so buffer shares respect partial cells
+  burnable_codes: [101, 204]   # FBFM40 101-204 are burnable, 91-99 are not
+  wildland_min_patch_ha: 10    # a "wildland" patch is at least this much contiguous burnable fuel
+  wui_code_year: 2008          # CA Chapter 7A building standards took effect for 2008+ construction
+  model:                       # pre-fire only. Perimeter distance is descriptive, never a model input
+    - elevation_m
+    - slope_deg
+    - aspect_sin
+    - aspect_cos
+    - fuel_burnable_at_building
+    - burnable_share_30m
+    - burnable_share_100m
+    - burnable_share_300m
+    - dist_wildland_m
+    - dist_nearest_building_m
+    - n_buildings_10m
+    - n_buildings_30m
+    - n_buildings_50m
+    - footprint_area_m2
+    - year_built
+    - built_after_2008
+
+hazard_zones:
+  baseline: in_effect          # LA County FHSZ (2007-2011 era) plus CAL FIRE SRA 2023 where it applies
+  secondary: lra_2025          # published after the fires, reported separately and labeled
+
+validation:
+  block_size_m: 500
+  n_folds: 5
+  calibration_bins: 10
+  permutation_repeats: 10
+
+models:
+  logistic:
+    C: 1.0
+    max_iter: 2000
+  hgb:
+    max_depth: 3
+    max_iter: 300
+    learning_rate: 0.05
+    min_samples_leaf: 50
+    l2_regularization: 1.0
