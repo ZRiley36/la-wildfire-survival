@@ -1,9 +1,11 @@
 /* LA Wildfire Survival: MapLibre front end. Data built by `python -m wildfire web`. */
 
+// Dark theme. Outcome colors are the dark-surface steps (validated against #1a1a19); the risk ramp runs from
+// dim to bright so low risk recedes into the background and high risk stands out.
 const COLORS = {
-  destroyed: "#e34948", damaged: "#eda100", none: "#2a78d6", unscored: "#c3c2b7",
-  risk: ["#fbe3cf", "#f5b08f", "#eb6834", "#c4401b", "#7f2a10"],
-  zone: "rgba(117,107,177,0.8)", perimeter: "#0b0b0b",
+  destroyed: "#d23c3c", damaged: "#c98500", none: "#3987e5", unscored: "#4a4945",
+  risk: ["#4f2617", "#8a3417", "#c4401b", "#eb6834", "#f7a77d"],
+  zone: "rgba(170,160,240,0.85)", perimeter: "#f0efec", ring: "#1a1a19",
 };
 const RISK_BREAKS = [0.5, 0.6, 0.7, 0.8];
 const OUTCOME_LABEL = { destroyed: "Destroyed", damaged: "Damaged", none: "No damage" };
@@ -22,7 +24,7 @@ const escapeHtml = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&a
 
 const map = new maplibregl.Map({
   container: "map",
-  style: "https://tiles.openfreemap.org/styles/positron",
+  style: "https://tiles.openfreemap.org/styles/dark",
   bounds: FIRES.both,
   fitBoundsOptions: { padding: { top: 40, bottom: 40, left: window.innerWidth > 640 ? 400 : 20, right: 40 } },
   minZoom: 9,
@@ -32,6 +34,10 @@ const map = new maplibregl.Map({
   attributionControl: { compact: true },
 });
 map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "top-right");
+// The dark basemap names a "wood-pattern" fill its sprite doesn't include. Give it a blank so it stops warning.
+map.on("styleimagemissing", (e) => {
+  if (!map.hasImage(e.id)) map.addImage(e.id, { width: 1, height: 1, data: new Uint8Array(4) });
+});
 map.addControl(new maplibregl.ScaleControl({ unit: "imperial" }), "bottom-right");
 
 const byId = new Map();
@@ -91,20 +97,20 @@ map.on("load", async () => {
   map.addLayer({ id: "footprints", type: "fill", source: "footprints", minzoom: FOOTPRINT_ZOOM - 0.5,
     paint: { "fill-color": colorExpr(), "fill-opacity": ["interpolate", ["linear"], ["zoom"], FOOTPRINT_ZOOM - 0.5, 0, FOOTPRINT_ZOOM, 0.9] } });
   map.addLayer({ id: "footprints-line", type: "line", source: "footprints", minzoom: FOOTPRINT_ZOOM,
-    paint: { "line-color": "#ffffff", "line-width": 0.6 } });
+    paint: { "line-color": COLORS.ring, "line-width": 0.6 } });
   map.addLayer({ id: "points", type: "circle", source: "buildings",
     paint: {
       "circle-color": colorExpr(),
       "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, 1.4, 13, 2.8, 15.5, 5],
-      "circle-stroke-color": "#ffffff",
+      "circle-stroke-color": COLORS.ring,
       "circle-stroke-width": ["interpolate", ["linear"], ["zoom"], 10, 0, 13, 0.5, 15.5, 1],
       "circle-opacity": ["interpolate", ["linear"], ["zoom"], FOOTPRINT_ZOOM, 1, FOOTPRINT_ZOOM + 0.6, 0],
       "circle-stroke-opacity": ["interpolate", ["linear"], ["zoom"], FOOTPRINT_ZOOM, 1, FOOTPRINT_ZOOM + 0.6, 0],
     } });
   map.addLayer({ id: "selected-fp", type: "line", source: "footprints", filter: ["==", ["get", "id"], -1],
-    paint: { "line-color": "#0b0b0b", "line-width": 3 } });
+    paint: { "line-color": "#f0efec", "line-width": 3 } });
   map.addLayer({ id: "selected-pt", type: "circle", source: "buildings", filter: ["==", ["get", "id"], -1],
-    paint: { "circle-radius": 9, "circle-color": "rgba(0,0,0,0)", "circle-stroke-color": "#0b0b0b", "circle-stroke-width": 2.5 } });
+    paint: { "circle-radius": 9, "circle-color": "rgba(0,0,0,0)", "circle-stroke-color": "#f0efec", "circle-stroke-width": 2.5 } });
 
   fillStats();
   wireControls();

@@ -40,6 +40,14 @@
   --hairline: #2c2c2a;
   --ring: rgba(255, 255, 255, 0.10);
   --accent: #3987e5;
+  /* dark steps of the data colors, validated against #1a1a19 */
+  --destroyed: #d23c3c;
+  --damaged: #c98500;
+  --spared: #3987e5;
+  --zone: rgba(170, 160, 240, 0.85);
+  --fuel: rgba(56, 176, 72, 0.55);
+  --perimeter: #f0efec;
+  --risk-hi: #eb6834;
 }
 
 * { box-sizing: border-box; }
@@ -106,7 +114,7 @@ select {
 .swatch { flex: none; width: 14px; height: 14px; border-radius: 3px; background: var(--c); }
 .swatch.hatch { border: 1px solid var(--h); background: repeating-linear-gradient(135deg, transparent 0 3px, var(--h) 3px 4px); }
 .swatch.hatch.zone { --h: var(--zone); }
-.swatch.dot { width: 11px; height: 11px; margin: 0 1px; border-radius: 50%; background: var(--c); box-shadow: 0 0 0 1.5px #fff, 0 0 0 2.5px var(--hairline); }
+.swatch.dot { width: 11px; height: 11px; margin: 0 1px; border-radius: 50%; background: var(--c); box-shadow: 0 0 0 1.5px var(--surface), 0 0 0 2.5px var(--hairline); }
 .swatch.line { height: 0; border-top: 2px solid var(--perimeter); border-radius: 0; background: none; }
 .seg { display: flex; gap: 4px; flex-wrap: wrap; margin: 0 0 8px; }
 .seg button { flex: 1; padding: 6px 8px; font: inherit; font-size: 12.5px; color: var(--text-secondary); background: var(--surface);
@@ -188,3 +196,14 @@ td .boro { color: var(--text-muted); font-size: 11px; margin-left: 4px; }
   #panel.collapsed { bottom: 0; }
   .stat .value { font-size: 19px; }
 }
+
+/* MapLibre's own controls, restyled for the dark theme */
+:root[data-theme="dark"] .maplibregl-ctrl-group { background: var(--surface); box-shadow: 0 0 0 1px var(--ring); }
+:root[data-theme="dark"] .maplibregl-ctrl-group button + button { border-top-color: var(--hairline); }
+:root[data-theme="dark"] .maplibregl-ctrl-group button .maplibregl-ctrl-icon { filter: invert(1) brightness(0.9); }
+:root[data-theme="dark"] .maplibregl-ctrl-attrib, :root[data-theme="dark"] .maplibregl-ctrl-attrib.maplibregl-compact {
+  background: rgba(26, 26, 25, 0.85); color: var(--text-secondary); }
+:root[data-theme="dark"] .maplibregl-ctrl-attrib a { color: var(--text-secondary); }
+:root[data-theme="dark"] .maplibregl-ctrl-attrib-button { filter: invert(1); background-color: transparent; }
+:root[data-theme="dark"] .maplibregl-ctrl-scale { background: rgba(26, 26, 25, 0.75); color: var(--text-secondary);
+  border-color: var(--text-muted); }

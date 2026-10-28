@@ -23,7 +23,7 @@ from wildfire.config import FIGURES, PROCESSED, ROOT, cfg, interim
 OUT = ROOT / "web/data"
 IMG = ROOT / "web/img"
 GEO = "EPSG:4326"
-FUEL_RGBA = (0, 131, 0, 92)  # burnable fuel, translucent green
+FUEL_RGBA = (56, 176, 72, 120)  # burnable fuel, translucent green that reads on the dark basemap
 
 
 def log(msg):
