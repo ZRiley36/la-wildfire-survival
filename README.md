@@ -61,7 +61,7 @@ python3 -m venv .venv && .venv/bin/pip install -r requirements.txt && .venv/bin/
 source .venv/bin/activate
 python -m wildfire.download                          # ~670 MB into data/raw/
 python -m wildfire.inventory > docs/data_inventory.json
-python -m wildfire                                   # the whole pipeline, about 2 minutes
+python -m wildfire                                   # the whole pipeline, under 2 minutes
 python -m pytest
 ```
 
