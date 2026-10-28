@@ -9,10 +9,12 @@ FIRE's official Fire Hazard Severity Zones?
 This is a validation project more than a mapping one. The point is to build the model without letting any
 after-the-fact information leak in, and then test it against what really happened.
 
-Work in progress. The data inventory is in `docs/data_inventory.md` and the full method and results are in
-`docs/methodology.md`.
+The results are in `docs/findings.md`, the full method in `docs/methodology.md`, and the data inventory in
+`docs/data_inventory.md`. A web map is next.
 
-## What I've found so far
+![Cross-fire transfer](docs/figures/fig3_cross_fire.png)
+
+## What I found
 
 Inside the two perimeters, 70% of homes were destroyed in both fires, so "everything burned" is already 70%
 accurate and accuracy is the wrong yardstick. On ranking which homes burned, the official map that was in effect in
@@ -59,12 +61,20 @@ python3 -m venv .venv && .venv/bin/pip install -r requirements.txt && .venv/bin/
 source .venv/bin/activate
 python -m wildfire.download                          # ~670 MB into data/raw/
 python -m wildfire.inventory > docs/data_inventory.json
-python -m wildfire                                   # the whole pipeline, about 1.5 minutes
+python -m wildfire                                   # the whole pipeline, about 2 minutes
 python -m pytest
 ```
 
 Or `make setup download pipeline test`. All tunable choices (CRS, buffers, feature list, model settings, fold size)
 are in `config/config.yaml`.
+
+## Outputs
+
+`data/processed/buildings_wildfire.parquet` has every residential building with its features, outcome and
+out-of-fold predictions. `model_metrics.json` holds every metric, sensitivity and importance score, and
+`aggregates/` the destruction rates by group. `data/processed/web/` has the layers for a web map in EPSG:4326:
+building points with outcome and predicted risk, the perimeters, and the LANDFIRE fuel layer as a Cloud-Optimized
+GeoTIFF per fire. Figures are in `docs/figures/`. `data/` isn't committed, so rerun the pipeline to rebuild these.
 
 ## Limitations
 
