@@ -1,0 +1,57 @@
+{
+ "buildings": 16306,
+ "destroyed": 11474,
+ "destroyed_pct": 70.4,
+ "by_fire": {
+  "Eaton": {
+   "buildings": 8560,
+   "destroyed_pct": 70.4
+  },
+  "Palisades": {
+   "buildings": 7746,
+   "destroyed_pct": 70.3
+  }
+ },
+ "auc": {
+  "hgb": 0.7576,
+  "logistic": 0.6791,
+  "fhsz_in_effect": 0.539,
+  "fhsz_lra_2025_postfire": 0.5178
+ },
+ "brier": {
+  "hgb": 0.1705,
+  "logistic": 0.1895,
+  "fhsz_in_effect": 0.209,
+  "constant": 0.209
+ },
+ "auc_diff_ci": [
+  0.1974,
+  0.3171
+ ],
+ "xfire": {
+  "eaton->palisades": {
+   "hgb": 0.7002,
+   "logistic": 0.476,
+   "fhsz_in_effect": 0.5
+  },
+  "palisades->eaton": {
+   "hgb": 0.6006,
+   "logistic": 0.5907,
+   "fhsz_in_effect": 0.5
+  }
+ },
+ "xfire_logistic_no_elev": {
+  "eaton->palisades": 0.6852,
+  "palisades->eaton": 0.6028
+ },
+ "leakage_auc": {
+  "pre_fire_only": 0.7611,
+  "post_fire_fields_only": 0.9424,
+  "pre_plus_post_fire": 0.9558,
+  "unknown_flags_only_logistic": 0.895
+ },
+ "zone_rates_eaton": {
+  "Not in a zone": 74.3,
+  "Very High": 57.6
+ }
+}

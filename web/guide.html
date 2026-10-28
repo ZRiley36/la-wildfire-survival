@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wildfire Survival Guide</title>
+  <meta name="description" content="How the LA Wildfire Survival map and model work: the data, the validation, the results, and their limits.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 1c1 3 4 4 4 8a4 4 0 0 1-8 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-5 0-7z' fill='%23e34948'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="guide.css">
+</head>
+<body>
+  <header class="top">
+    <div class="wrap">
+      <a class="back" href="index.html">← Back to the map</a>
+      <h1>LA Wildfire Survival: guide</h1>
+      <p class="lede">What predicted which homes burned in the 2025 Palisades and Eaton fires, how I tested it, and
+        where the answers stop.</p>
+    </div>
+  </header>
+
+  <div class="wrap layout">
+    <nav class="toc" aria-label="On this page">
+      <p class="toc-title">On this page</p>
+      <ol>
+        <li><a href="#question">The question</a></li>
+        <li><a href="#findings">Key findings</a></li>
+        <li><a href="#using">Using the map</a></li>
+        <li><a href="#colors">Reading the colors</a></li>
+        <li><a href="#data">The data</a></li>
+        <li><a href="#features">What the model knows</a></li>
+        <li><a href="#validation">How I tested it</a></li>
+        <li><a href="#results">Results</a></li>
+        <li><a href="#leakage">A model that looks great and means nothing</a></li>
+        <li><a href="#glossary">Glossary</a></li>
+        <li><a href="#limits">Limitations</a></li>
+        <li><a href="#reproduce">Reproducing it</a></li>
+      </ol>
+    </nav>
+
+    <main>
+      <section id="question">
+        <h2>The question</h2>
+        <p><strong>For homes inside the January 2025 Palisades and Eaton fire perimeters, which things you could
+          have measured <em>before</em> the fires best predicted whether a home was destroyed, and does a simple model
+          built on them beat CAL FIRE's official Fire Hazard Severity Zones?</strong></p>
+        <p>After the fires, CAL FIRE inspectors visited every building inside the perimeters and recorded the damage.
+          That gives something rare: a known outcome for every home. This project uses it as an answer key. The point
+          isn't to build the most accurate model possible. It's to build one honestly, using only information that
+          existed before the fires, and then check it against what actually happened.</p>
+      </section>
+
+      <section id="findings">
+        <h2>Key findings</h2>
+        <div class="tiles">
+          <div class="tile"><span class="v" data-stat="buildings">–</span><span class="l">homes inside the two perimeters</span></div>
+          <div class="tile"><span class="v" data-stat="destroyed_pct" data-fmt="pct0">–</span><span class="l">destroyed, in both fires</span></div>
+          <div class="tile"><span class="v" data-stat="auc.hgb" data-fmt="dec2">–</span><span class="l">model's ROC AUC under spatial cross-validation</span></div>
+          <div class="tile"><span class="v" data-stat="auc.fhsz_in_effect" data-fmt="dec2">–</span><span class="l">the official hazard map's ROC AUC</span></div>
+        </div>
+        <p><strong>Nearly everything inside the perimeters burned</strong>, 70% in both fires. That makes accuracy a
+          useless yardstick: "they all burned" is 70% accurate. What matters is ranking. Could you tell, ahead of time,
+          which homes were more likely to go?</p>
+        <p><strong>The official map couldn't.</strong> Every Palisades home was in a Very High zone. In Eaton the map
+          pointed the wrong way: <span data-stat="zone_rates_eaton.Very High" data-fmt="pct1raw">–</span> of homes in
+          the Very High zone were destroyed, against <span data-stat="zone_rates_eaton.Not in a zone" data-fmt="pct1raw">–</span>
+          of homes outside any zone. It was built to say where fire is likely, not which house on a street survives,
+          and that's the job this test asks about.</p>
+        <p><strong>A small model on pre-fire data did clearly better</strong>, and its probabilities are well
+          calibrated. What drove it: how old the house was, how close its neighbors were, and how far it sat from
+          wildland. Homes with another building within 2 m were destroyed about 80% of the time, against about 40% for
+          homes with nothing within 20 m. That's the house-to-house spread the Insurance Institute for Business &amp;
+          Home Safety described in these fires.</p>
+        <p><strong>It transfers only partly.</strong> Trained on one fire and tested on the other, it scores
+          <span data-stat="xfire.eaton->palisades.hgb" data-fmt="dec2">–</span> and
+          <span data-stat="xfire.palisades->eaton.hgb" data-fmt="dec2">–</span>. That's still better than the map, but
+          it shows how much depends on the particular fire.</p>
+      </section>
+
+      <section id="using">
+        <h2>Using the map</h2>
+        <p>Each dot is a home that CAL FIRE inspected. Zoom in past street level and the dots become building outlines.
+          Click one to see what happened to it, what the model predicted, and the pre-fire facts the prediction was
+          based on.</p>
+        <p>The <em>Color homes by</em> buttons switch between what actually happened and what the model predicted.
+          Flipping between them is the quickest way to see where the model was right and where it missed. The search
+          box finds inspected homes by address, and the <em>Go to</em> buttons jump to each fire.</p>
+        <p>The layers add context. Turn on the hazard zones to see how much of each burn area the official map called
+          Very High, or the burnable vegetation to see where the wildland edge was. The panel also compares how well
+          the model and the map rank homes. The page address updates as you move, so you can share an exact view.</p>
+      </section>
+
+      <section id="colors">
+        <h2>Reading the colors</h2>
+        <h3>What happened</h3>
+        <ul class="keys">
+          <li><span class="sw dot" style="--c:#e34948"></span><div><strong>Red</strong>: destroyed, more than 50% damage.</div></li>
+          <li><span class="sw dot" style="--c:#eda100"></span><div><strong>Yellow</strong>: damaged, from affected (up to 10%) through major (25 to 50%).</div></li>
+          <li><span class="sw dot" style="--c:#2a78d6"></span><div><strong>Blue</strong>: no damage.</div></li>
+        </ul>
+        <h3>Model's predicted risk</h3>
+        <ul class="keys">
+          <li><span class="sw" style="--c:linear-gradient(90deg,#fbe3cf,#f5b08f,#eb6834,#c4401b,#7f2a10)"></span><div>Pale to dark
+            red is the predicted chance of destruction, from under 50% to over 80%. Every prediction comes from a model
+            that was trained without that home's 500 m neighborhood, so the map never shows a model grading its own
+            homework. Homes outside the perimeter are gray because the model wasn't trained or scored on them.</div></li>
+        </ul>
+        <h3>Layers</h3>
+        <ul class="keys">
+          <li><span class="sw line"></span><div><strong>Black line</strong>: CAL FIRE's final fire perimeter.</div></li>
+          <li><span class="sw hatch zone"></span><div><strong>Purple hatching</strong>: Very High Fire Hazard Severity Zone
+            on the maps in effect in January 2025.</div></li>
+          <li><span class="sw" style="--c:rgba(0,131,0,0.45)"></span><div><strong>Green</strong>: burnable vegetation in
+            LANDFIRE's 2023 fuel map (grass, shrub, timber). Urban land, water and bare ground are left clear.</div></li>
+        </ul>
+      </section>
+
+      <section id="data">
+        <h2>The data</h2>
+        <p>Everything is public.</p>
+        <div class="table-wrap">
+        <table>
+          <thead><tr><th scope="col">Dataset</th><th scope="col">Publisher</th><th scope="col">How it's used</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Damage Inspection (DINS)</strong><br><span class="id">statewide master, both fires</span></td><td>CAL FIRE</td>
+              <td>The outcome for every residential building, plus year built from the assessor.</td></tr>
+            <tr><td><strong>Buildings_2023_with_DINS</strong></td><td>LA County</td>
+              <td>Building outlines, for neighbor spacing and the map.</td></tr>
+            <tr><td><strong>2025 Parcels with DINS</strong></td><td>LA County Assessor</td>
+              <td>Parcel attributes and communities. Fills in year built where DINS has none.</td></tr>
+            <tr><td><strong>Fire perimeters</strong><br><span class="id">FRAP 2025</span></td><td>CAL FIRE</td>
+              <td>Defines which homes are studied.</td></tr>
+            <tr><td><strong>LF2023 fuel models (FBFM40)</strong></td><td>LANDFIRE</td>
+              <td>Burnable vegetation around each home and the distance to wildland. 2023, before the fires.</td></tr>
+            <tr><td><strong>3DEP 1/3 arc-second DEM</strong><br><span class="id">tile published Feb 2024</span></td><td>USGS</td>
+              <td>Elevation, slope and aspect.</td></tr>
+            <tr><td><strong>Fire Hazard Severity Zones</strong></td><td>CAL FIRE, LA County Fire</td>
+              <td>The baseline: the maps in effect in January 2025, and the 2025 update for comparison.</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </section>
+
+      <section id="features">
+        <h2>What the model knows</h2>
+        <p>Only things that existed before January 7, 2025:</p>
+        <div class="table-wrap">
+        <table>
+          <thead><tr><th scope="col">Feature</th><th scope="col">How it's measured</th></tr></thead>
+          <tbody>
+            <tr><td>Year built</td><td>Assessor year, plus a flag for homes built after 2008 under California's wildland building code</td></tr>
+            <tr><td>Neighbor spacing</td><td>Distance to the nearest other building, and how many buildings are within 10, 30 and 50 m. Garages and sheds count, since they burn too</td></tr>
+            <tr><td>Distance to wildland</td><td>Distance to the nearest patch of at least 10 ha of continuous burnable vegetation</td></tr>
+            <tr><td>Surrounding fuel</td><td>Share of a 30, 100 and 300 m circle that's burnable, and whether the home's own cell is</td></tr>
+            <tr><td>Terrain</td><td>Elevation, slope and which way the slope faces</td></tr>
+            <tr><td>Footprint size</td><td>Area of the building outline</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <p>Two things are deliberately left out. Distance to the fire perimeter would score very well, but the
+          perimeter is drawn around what burned, so it would be learning the answer. And the construction details
+          inspectors recorded after the fire have a worse problem, covered <a href="#leakage">below</a>.</p>
+      </section>
+
+      <section id="validation">
+        <h2>How I tested it</h2>
+        <p><strong>No random splits.</strong> Neighbors share outcomes, because whole blocks burned together, often
+          because one house ignited the next. If a random split puts a house in the test set and its next-door neighbor
+          in training, the model gets graded on a near-copy of something it already saw. So every test keeps whole
+          areas apart.</p>
+        <p><strong>Block cross-validation.</strong> The study area is cut into 500 m squares, and whole squares are
+          dealt into five groups. The model is trained on four and tested on the fifth, five times over, so every home
+          gets a prediction from a model that never saw its neighborhood.</p>
+        <p><strong>Cross-fire.</strong> Train on Eaton and test on Palisades, then the reverse. This is the hardest
+          test. It asks whether the lessons of one fire carry over to another.</p>
+        <p><strong>Three measures.</strong> ROC AUC says how well the scores rank destroyed homes above survivors (0.5
+          is a coin flip). PR AUC focuses on finding the destroyed homes. The Brier score checks whether the
+          probabilities themselves are right. The hazard map gets the same treatment: it predicts each zone's
+          destruction rate from the training data, scored on the same tests.</p>
+      </section>
+
+      <section id="results">
+        <h2>Results</h2>
+        <div class="table-wrap">
+        <table>
+          <thead><tr><th scope="col">Model</th><th scope="col" class="num">ROC AUC</th><th scope="col" class="num">Brier</th><th scope="col" class="num">Eaton → Palisades</th><th scope="col" class="num">Palisades → Eaton</th></tr></thead>
+          <tbody>
+            <tr><td>Hazard zone, January 2025</td><td class="num" data-stat="auc.fhsz_in_effect" data-fmt="dec2">–</td><td class="num" data-stat="brier.fhsz_in_effect" data-fmt="dec3">–</td><td class="num" data-stat="xfire.eaton->palisades.fhsz_in_effect" data-fmt="dec2">–</td><td class="num" data-stat="xfire.palisades->eaton.fhsz_in_effect" data-fmt="dec2">–</td></tr>
+            <tr><td>Logistic regression</td><td class="num" data-stat="auc.logistic" data-fmt="dec2">–</td><td class="num" data-stat="brier.logistic" data-fmt="dec3">–</td><td class="num" data-stat="xfire.eaton->palisades.logistic" data-fmt="dec2">–</td><td class="num" data-stat="xfire.palisades->eaton.logistic" data-fmt="dec2">–</td></tr>
+            <tr><td><strong>Gradient boosting</strong></td><td class="num" data-stat="auc.hgb" data-fmt="dec2">–</td><td class="num" data-stat="brier.hgb" data-fmt="dec3">–</td><td class="num" data-stat="xfire.eaton->palisades.hgb" data-fmt="dec2">–</td><td class="num" data-stat="xfire.palisades->eaton.hgb" data-fmt="dec2">–</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <p>Predicting the 70% base rate for everyone gives a Brier score of <span data-stat="brier.constant" data-fmt="dec3">–</span>,
+          so the hazard map adds nothing on that measure either.</p>
+        <figure><img src="img/fig1_roc_pr.png" alt="ROC and precision-recall curves. Gradient boosting ROC AUC 0.76 and average precision 0.87, logistic regression 0.68 and 0.81, hazard zone 0.54 and 0.72, close to the diagonal." loading="lazy"></figure>
+        <figure class="narrow"><img src="img/fig2_calibration.png" alt="Calibration plot. Gradient boosting and logistic regression points fall close to the diagonal from about 30% to 95% predicted. The hazard zone's predictions cluster between 65% and 75%." loading="lazy">
+          <figcaption>Calibration: when the model says 80%, about 80% of those homes were destroyed.</figcaption></figure>
+        <h3>What drives the predictions</h3>
+        <figure><img src="img/fig4_importance.png" alt="Permutation importance bars. In block cross-validation, elevation leads, then distance to wildland, year built, buildings within 50 m and nearest building. Across fires, year built leads, then burnable share within 300 m and distance to wildland." loading="lazy"></figure>
+        <p>Year built, neighbor spacing and distance to wildland matter in both kinds of test. Elevation is the
+          strongest feature <em>within</em> the fires but much weaker across them, because absolute elevation mostly
+          marks where in a particular fire a home sits. In fact, logistic regression trained on Eaton extrapolated so
+          badly on Palisades, which reaches down to sea level, that it did worse than a coin flip. Without elevation it
+          scores <span data-stat="xfire_logistic_no_elev.eaton->palisades" data-fmt="dec2">–</span>.</p>
+        <figure><img src="img/fig6_destruction_rates.png" alt="Bar charts of destruction rates. By nearest-building distance, rates fall from 77% and 86% within 2 m to 39% and 44% beyond 20 m. By year built, older homes burned more, with exceptions among the newest Palisades homes." loading="lazy"></figure>
+        <p>One effect runs against intuition: homes <em>farther</em> from wildland were destroyed more often. Some of
+          that is real, because dense interior neighborhoods burned house to house. Some of it is selection. Only homes
+          inside the perimeter are studied, and a home deep in a neighborhood is only inside the perimeter if the fire
+          reached it.</p>
+        <figure><img src="img/fig5_partial_dependence.png" alt="Partial dependence curves. Predicted destruction rises with distance to wildland and with buildings within 50 m, falls for homes built after about 1960, and drops once the nearest building is more than about 5 m away." loading="lazy"></figure>
+        <figure><img src="img/fig3_cross_fire.png" alt="Cross-fire bars. Train Eaton, test Palisades: gradient boosting 0.70, logistic 0.48, hazard zone 0.50. Train Palisades, test Eaton: 0.60, 0.59, 0.50." loading="lazy"></figure>
+      </section>
+
+      <section id="leakage">
+        <h2>A model that looks great and means nothing</h2>
+        <p>CAL FIRE's inspectors also recorded each home's roof, eaves, vents, windows, siding, decks and fences.
+          Adding those lifts the model to <span data-stat="leakage_auc.pre_plus_post_fire" data-fmt="dec2">–</span>.
+          It's a mirage. Inspectors fill those fields in <em>after</em> the fire, and on a house that burned to the
+          foundation there are no eaves left to classify. They write "Unknown": for 71% of destroyed homes, against
+          0.7% of survivors. A model using only the "Unknown" flags scores
+          <span data-stat="leakage_auc.unknown_flags_only_logistic" data-fmt="dec2">–</span>. It isn't learning about
+          construction at all. It's learning whether there was anything left to inspect. None of those fields are used
+          anywhere else.</p>
+      </section>
+
+      <section id="glossary">
+        <h2>Glossary</h2>
+        <dl class="glossary">
+          <dt>DINS</dt>
+          <dd>CAL FIRE's Damage Inspection program. After a fire, inspectors record every structure's damage in five
+            classes: no damage, affected (up to 10%), minor (10 to 25%), major (25 to 50%) and destroyed (over 50%).</dd>
+          <dt>Fire Hazard Severity Zone (FHSZ)</dt>
+          <dd>CAL FIRE's map of fire hazard, in Moderate, High and Very High classes. It drives building code and
+            disclosure rules. State-responsibility areas got an updated map in April 2024, and local areas in March 2025,
+            after these fires.</dd>
+          <dt>ROC AUC</dt>
+          <dd>The chance that a randomly picked destroyed home gets a higher score than a randomly picked survivor.
+            0.5 is a coin flip and 1.0 is perfect.</dd>
+          <dt>PR AUC (average precision)</dt>
+          <dd>How precise the predictions are as you try to find more and more of the destroyed homes. Its floor is the
+            share destroyed, about 0.70 here.</dd>
+          <dt>Brier score</dt>
+          <dd>The average squared gap between the predicted probability and what happened (0 or 1). Lower is better.</dd>
+          <dt>Calibration</dt>
+          <dd>Whether predicted probabilities mean what they say: of the homes given 80%, about 80% should have burned.</dd>
+          <dt>Spatial cross-validation</dt>
+          <dd>Testing a model on areas it never trained on, so neighbors can't leak their outcomes into the test.</dd>
+          <dt>Gradient boosting</dt>
+          <dd>A model built from many small decision trees, each correcting the last. This one is kept deliberately
+            small, with trees three levels deep.</dd>
+          <dt>Permutation importance</dt>
+          <dd>How much the model's score drops when one feature's values are shuffled, measured on held-out data.</dd>
+          <dt>Partial dependence</dt>
+          <dd>How the average prediction changes as one feature moves, with every other feature left as it was.</dd>
+          <dt>Leakage</dt>
+          <dd>When a model's inputs carry information about the answer that wouldn't be available at prediction time.</dd>
+          <dt>LANDFIRE FBFM40</dt>
+          <dd>The 40 Scott and Burgan fire behavior fuel models, a 30 m national map of what kind of vegetation would
+            carry fire. Codes 91 to 99 are non-burnable.</dd>
+          <dt>Chapter 7A</dt>
+          <dd>California's building code for wildland areas, which requires ember-resistant vents, ignition-resistant
+            siding and similar features. It applies to construction from 2008 on.</dd>
+          <dt>Santa Ana winds</dt>
+          <dd>Hot, dry offshore winds in Southern California. Both fires burned under an extreme Santa Ana event.</dd>
+        </dl>
+      </section>
+
+      <section id="limits">
+        <h2>Limitations</h2>
+        <p>These are two fires under extreme Santa Ana winds. Under ordinary weather the wildland edge probably matters
+          more and neighbor spacing less, and even between these two fires the results move.</p>
+        <p>The study only includes homes inside the final perimeters, which are drawn around what burned. That
+          inflates some effects, distance to wildland most of all. A model meant for use before a fire would also have
+          to cover homes the fire never reached.</p>
+        <p>DINS damage classes are reliable, but its construction fields are compromised, so construction is only
+          represented through year built. Most building outlines date from 2008, and some homes share a parcel.</p>
+        <p>The hazard map in effect was largely CAL FIRE's 2007 to 2011 generation. Neither it nor its 2025 update was
+          built to rank individual homes inside a burn area, and that's the specific job tested here.</p>
+        <p>The model finds what predicted destruction, not what caused it. Age, density and distance to wildland all
+          travel with neighborhood history. This isn't an assessment of any individual home.</p>
+      </section>
+
+      <section id="reproduce">
+        <h2>Reproducing it</h2>
+        <p>The pipeline is Python (GeoPandas, Shapely, rasterio, scikit-learn) and runs end to end in under two
+          minutes after a one-time download. The code is on
+          <a href="https://github.com/ZRiley36/la-wildfire-survival" target="_blank" rel="noopener">GitHub</a>.</p>
+<pre><code>make setup download
+make pipeline        # ingest → join → features → validate → figures → web data
+make test</code></pre>
+        <p>The data inventory, full method, and written findings are in the project's <code>docs/</code> folder. The
+          IBHS report on these fires is Monroy et al. (2025), <a href="https://doi.org/10.82346/KYXN-NS13" target="_blank" rel="noopener"><em>The 2025 LA Conflagrations</em></a>.</p>
+      </section>
+    </main>
+  </div>
+
+  <footer class="wrap foot">Data: CAL FIRE, LA County, LANDFIRE, USGS, US Census Bureau.
+    Basemap © OpenFreeMap, © OpenStreetMap contributors.</footer>
+
+  <script>
+    // Numbers come from the same stats.json the map uses, so the guide never drifts from the data.
+    const get = (o, path) => path.split(".").reduce((x, k) => (x == null ? x : x[k]), o);
+    const FMT = {
+      int: (v) => Math.round(v).toLocaleString(),
+      dec2: (v) => v.toFixed(2),
+      dec3: (v) => v.toFixed(3),
+      pct0: (v) => `${Math.round(v)}%`,
+      pct1raw: (v) => `${v.toFixed(1)}%`,
+    };
+    fetch("data/stats.json").then((r) => r.json()).then((s) => {
+      document.querySelectorAll("[data-stat]").forEach((el) => {
+        const v = get(s, el.dataset.stat);
+        if (typeof v === "number") el.textContent = FMT[el.dataset.fmt || "int"](v);
+      });
+    }).catch(() => {});
+  </script>
+</body>
+</html>

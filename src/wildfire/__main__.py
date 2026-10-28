@@ -7,7 +7,7 @@ import sys
 import time
 import warnings
 
-from wildfire import analyze, clean, evaluate, features, figures, ingest, join, outputs, spotcheck
+from wildfire import analyze, clean, evaluate, features, figures, ingest, join, outputs, spotcheck, web_export
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 warnings.filterwarnings("ignore", category=FutureWarning)
@@ -22,6 +22,7 @@ STEPS = {
     "analyze": analyze.main,
     "outputs": outputs.main,
     "figures": figures.main,
+    "web": web_export.main,
     "spotcheck": spotcheck.main,
 }
 

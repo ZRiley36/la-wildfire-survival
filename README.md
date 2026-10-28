@@ -9,8 +9,12 @@ FIRE's official Fire Hazard Severity Zones?
 This is a validation project more than a mapping one. The point is to build the model without letting any
 after-the-fact information leak in, and then test it against what really happened.
 
-The results are in `docs/findings.md`, the full method in `docs/methodology.md`, and the data inventory in
-`docs/data_inventory.md`. A web map is next.
+Live map: https://zriley36.github.io/la-wildfire-survival/
+
+Guide and documentation: https://zriley36.github.io/la-wildfire-survival/guide.html
+
+The written results are in `docs/findings.md`, the full method in `docs/methodology.md`, and the data inventory in
+`docs/data_inventory.md`.
 
 ![Cross-fire transfer](docs/figures/fig3_cross_fire.png)
 
@@ -75,6 +79,13 @@ out-of-fold predictions. `model_metrics.json` holds every metric, sensitivity an
 `aggregates/` the destruction rates by group. `data/processed/web/` has the layers for a web map in EPSG:4326:
 building points with outcome and predicted risk, the perimeters, and the LANDFIRE fuel layer as a Cloud-Optimized
 GeoTIFF per fire. Figures are in `docs/figures/`. `data/` isn't committed, so rerun the pipeline to rebuild these.
+
+## Web map
+`web/` is a static MapLibre GL site, deployed to GitHub Pages by `.github/workflows/pages.yml` whenever `web/`
+changes. `python -m wildfire web` rebuilds its data in `web/data/` (about 17 MB of GeoJSON, two fuel overlays and
+`stats.json`) and copies the figures into `web/img/`. Homes can be colored by what happened or by the model's
+out-of-fold predicted risk, and the guide page pulls its numbers from the same `stats.json`, so it can't drift from
+the data. To preview it locally, run `python -m http.server 8000 --directory web`.
 
 ## Limitations
 

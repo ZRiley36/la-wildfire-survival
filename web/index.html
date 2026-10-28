@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LA Wildfire Survival</title>
+  <meta name="description" content="Every home inside the January 2025 Palisades and Eaton fire perimeters: what happened to it, and what a model using only pre-fire data predicted.">
+  <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 1c1 3 4 4 4 8a4 4 0 0 1-8 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-5 0-7z' fill='%23e34948'/%3E%3C/svg%3E">
+</head>
+<body>
+  <div id="map" role="region" aria-label="Map of homes in the 2025 Palisades and Eaton fires"></div>
+
+  <aside id="panel">
+    <header>
+      <h1>LA Wildfire Survival</h1>
+      <p class="lede">Every home inside the January 2025 <strong>Palisades and Eaton</strong> fire perimeters, what
+        happened to it, and what a model using only <strong>pre-fire</strong> data predicted.</p>
+      <a class="guide-link" href="guide.html" target="_blank" rel="noopener">How to read this map: data, method &amp; glossary ↗</a>
+      <button id="collapse" aria-expanded="true" aria-controls="panel-body" title="Collapse panel">
+        <span aria-hidden="true">▾</span><span class="sr">Toggle panel</span></button>
+      <form id="search" role="search" autocomplete="off">
+        <label for="q" class="sr">Search an address</label>
+        <input id="q" type="search" placeholder="Search an address, e.g. Lake Ave"
+               role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="results">
+        <ul id="results" role="listbox" hidden></ul>
+        <p id="search-status" class="search-status" aria-live="polite"></p>
+      </form>
+    </header>
+
+    <div id="panel-body">
+      <section class="stats" aria-label="Headline numbers">
+        <div class="stat"><span class="value" id="s-homes">–</span>
+          <span class="label">homes inside the two perimeters</span></div>
+        <div class="stat"><span class="value" id="s-destroyed">–</span>
+          <span class="label">destroyed, in both fires</span></div>
+        <div class="stat"><span class="value" id="s-auc-model">–</span>
+          <span class="label">model's ranking score (ROC AUC)</span></div>
+        <div class="stat"><span class="value" id="s-auc-zone">–</span>
+          <span class="label">official hazard map's score (0.5 = coin flip)</span></div>
+      </section>
+
+      <section>
+        <h2 class="section-title">Color homes by</h2>
+        <div class="seg" role="group" aria-label="Color homes by">
+          <button type="button" data-mode="outcome" aria-pressed="true">What happened</button>
+          <button type="button" data-mode="risk" aria-pressed="false">Model's predicted risk</button>
+        </div>
+        <ul class="legend keys" id="legend-outcome">
+          <li><span class="swatch dot" style="--c: var(--destroyed)"></span>Destroyed (more than 50% damage)</li>
+          <li><span class="swatch dot" style="--c: var(--damaged)"></span>Damaged (affected, minor or major)</li>
+          <li><span class="swatch dot" style="--c: var(--spared)"></span>No damage</li>
+        </ul>
+        <div id="legend-risk" hidden>
+          <div class="legend ramp" id="risk-ramp" aria-label="Predicted risk color scale"></div>
+          <p class="hint">Predicted chance of destruction from pre-fire features only. Every prediction comes from a
+            model that never saw that home's neighborhood. Gray homes are outside the perimeter and weren't scored.</p>
+        </div>
+        <label class="check"><input type="checkbox" id="show-outside" checked> Include homes up to 300 ft outside the perimeter</label>
+      </section>
+
+      <section>
+        <h2 class="section-title">Go to</h2>
+        <div class="seg" role="group" aria-label="Go to">
+          <button type="button" data-go="both">Both fires</button>
+          <button type="button" data-go="palisades">Palisades</button>
+          <button type="button" data-go="eaton">Eaton</button>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="section-title">Layers</h2>
+        <label class="check"><input type="checkbox" id="lyr-perim" checked>
+          <span class="swatch line"></span>Fire perimeter (CAL FIRE)</label>
+        <label class="check"><input type="checkbox" id="lyr-zone">
+          <span class="swatch hatch zone"></span>Very High hazard zone, in effect Jan 2025</label>
+        <label class="check"><input type="checkbox" id="lyr-fuel">
+          <span class="swatch" style="--c: var(--fuel)"></span>Burnable vegetation (LANDFIRE 2023)</label>
+      </section>
+
+      <section>
+        <h2 class="section-title">How well each one ranks which homes burned</h2>
+        <div class="compare" id="compare" aria-label="ROC AUC comparison"></div>
+        <p class="hint">ROC AUC under spatial cross-validation. 0.5 is a coin flip, 1.0 is perfect. Trained on one fire
+          and tested on the other, the model scores <span id="s-xfire">–</span>.</p>
+      </section>
+
+      <details class="about">
+        <summary>About the data</summary>
+        <p><strong>Outcomes</strong>: CAL FIRE damage inspections (DINS) of every residential building. 81 that
+          inspectors couldn't reach are left out.</p>
+        <p><strong>Predicted risk</strong>: a small gradient-boosting model using year built, neighbor spacing,
+          distance to wildland, fuels and terrain. Nothing recorded after the fire was used. It's a ranking, not a
+          verdict on any one home.</p>
+        <p>Sources: CAL FIRE, LA County, LANDFIRE, USGS. Basemap © OpenFreeMap, © OpenStreetMap contributors.</p>
+      </details>
+    </div>
+  </aside>
+
+  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
